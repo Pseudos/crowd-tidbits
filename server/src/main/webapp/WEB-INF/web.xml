@@ -3,5 +3,67 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+	<display-name>Archetype Created Web Application</display-name>
+
+	<!-- Enable Java config -->
+	<context-param>
+		<param-name>contextClass</param-name>
+		<param-value>
+			org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+		</param-value>
+	</context-param>
+
+	<!-- Tells Spring where to find the config file -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>server.config.SpringConfig</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>productionMode</param-name>
+		<param-value>false</param-value>
+		<description>Vaadin production mode</description>
+	</context-param>
+
+
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>Application</servlet-name>
+		<servlet-class>ru.xpoft.vaadin.SpringVaadinServlet</servlet-class>
+		<init-param>
+			<param-name>beanName</param-name>
+			<!-- NOTE the value MUST be the same as the method name of you UI Spring 
+				bean -->
+			<param-value>HomePage</param-value>
+		</init-param>
+
+		<!-- Use this part to contain several pages in one Vaadin servlet -->
+		<init-param>
+			<param-name>UIProvider</param-name>
+			<param-value>server.pages.DifferentFeaturesForDifferentClients</param-value>
+			<description>Vaadin UI</description>
+		</init-param>
+
+		<init-param>
+			<param-name>closeIdleSessions</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</servlet>
+
+	<!-- Maps URL to the Vaadin servlet -->
+	<servlet-mapping>
+		<servlet-name>Application</servlet-name>
+		<url-pattern>/ui/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Application</servlet-name>
+		<url-pattern>/VAADIN/*</url-pattern>
+	</servlet-mapping>
 </web-app>
