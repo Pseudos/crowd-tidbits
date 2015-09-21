@@ -3,7 +3,7 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-	<display-name>Archetype Created Web Application</display-name>
+	<display-name>Crowd/Tidbits</display-name>
 
 	<!-- Enable Java config -->
 	<context-param>
@@ -25,8 +25,6 @@
 		<description>Vaadin production mode</description>
 	</context-param>
 
-
-
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
@@ -39,12 +37,9 @@
 		<servlet-class>ru.xpoft.vaadin.SpringVaadinServlet</servlet-class>
 		<init-param>
 			<param-name>beanName</param-name>
-			<!-- NOTE the value MUST be the same as the method name of you UI Spring 
-				bean -->
 			<param-value>HomePage</param-value>
 		</init-param>
 
-		<!-- Use this part to contain several pages in one Vaadin servlet -->
 		<init-param>
 			<param-name>UIProvider</param-name>
 			<param-value>server.pages.DifferentFeaturesForDifferentClients</param-value>
@@ -57,6 +52,48 @@
 		</init-param>
 	</servlet>
 
+	<servlet>
+		<servlet-name>jersey-serlvet</servlet-name>
+		<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+
+		<init-param>
+			<param-name>
+				com.sun.jersey.config.property.packages
+			</param-name>
+			<param-value>server.rest</param-value>
+		</init-param>
+		<init-param>
+			<param-name>
+				com.sun.jersey.api.json.POJOMappingFeature
+			</param-name>
+			<param-value>
+				true
+			</param-value>
+		</init-param>
+
+		<init-param>
+			<param-name>
+				com.sun.jersey.spi.container.ContainerRequestFilters
+			</param-name>
+
+			<param-value>
+				com.sun.jersey.api.container.filter.GZIPContentEncodingFilter
+			</param-value>
+		</init-param>
+
+		<init-param>
+
+			<param-name>
+				com.sun.jersey.spi.container.ContainerResponseFilters
+			</param-name>
+
+			<param-value>
+				com.sun.jersey.api.container.filter.GZIPContentEncodingFilter
+			</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
 	<!-- Maps URL to the Vaadin servlet -->
 	<servlet-mapping>
 		<servlet-name>Application</servlet-name>
@@ -65,5 +102,11 @@
 	<servlet-mapping>
 		<servlet-name>Application</servlet-name>
 		<url-pattern>/VAADIN/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- Jersey servlet for REST services -->
+	<servlet-mapping>
+		<servlet-name>jersey-serlvet</servlet-name>
+		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 </web-app>
