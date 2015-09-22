@@ -6,6 +6,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import server.entity.User;
+import server.rest.response.DefaultResponse;
 import server.service.UserService;
 
 @Component
@@ -39,6 +41,9 @@ public class UserRest {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response registerUser(User request)
     {
+        DefaultResponse resp = userService.registerUser(request);
+        Response response = Response.status(Status.fromStatusCode(resp.getStatus())).entity(resp).build();
+        return response;
         
     }
     

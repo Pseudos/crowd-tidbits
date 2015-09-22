@@ -1,5 +1,7 @@
 package server.config;
 
+import java.util.Properties;
+
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -23,9 +25,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import server.dao.UserDao;
 import server.layouts.HomeLayout;
 import server.pages.DifferentFeaturesForDifferentClients;
 import server.pages.HomePage;
+import server.rest.UserRest;
+import server.service.UserService;
 
 @Import(RepositoryConfig.class)
 @Configuration
@@ -36,6 +41,21 @@ public class SpringConfig implements ApplicationContextAware {
     private static final String HTTP_CLIENT_CONNECTIONS_MAX_PER_ROUTE = "http.client.connections.max.per.route";
     private static final String HTTP_CLIENT_CONNECTIONS_MAX_TOTAL = "http.client.connections.max.total";
     ApplicationContext appContext;
+    
+  
+    //Services
+    @Bean
+    public UserService userService()
+    {
+        return new UserService();
+    }
+    
+    //DAOs
+    @Bean
+    public UserDao userDao()
+    {
+        return new UserDao();
+    }
     
     // UIs
     @Bean
@@ -96,6 +116,28 @@ public class SpringConfig implements ApplicationContextAware {
     public void setApplicationContext(ApplicationContext appCxt) throws BeansException {
         appContext = appCxt;
         getLog().debug("AppContextSet");
+    }
+    
+    //Application config
+    @Bean
+    public org.apache.commons.configuration.Configuration appConfig() {
+        org.apache.commons.configuration.Configuration config;
+
+        config = new org.apache.commons.configuration.PropertiesConfiguration();
+        Properties props = new Properties();
+        java.io.InputStream in = getClass().getResourceAsStream(
+                "/application.properties");
+        try {
+            props.load(in);
+            for (Object key : props.keySet()) {
+                String val = props.getProperty(key.toString());
+                config.addProperty(key.toString(), val);
+            }
+        } catch (Exception e) {
+            getLog().error("Failed to load application properties???", e);
+        }
+
+        return config;
     }
     
     private Logger getLog() {

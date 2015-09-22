@@ -110,7 +110,7 @@ public class RepositoryConfig {
 		LocalSessionFactoryBean asfb = new LocalSessionFactoryBean();
 		asfb.setDataSource(getDataSource());
 		asfb.setHibernateProperties(hibernateProperties());
-		asfb.setPackagesToScan(new String[] { "server.entities" });
+		asfb.setPackagesToScan(new String[] { "server.entity" });
 		return asfb;
 	}
 

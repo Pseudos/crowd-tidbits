@@ -2,12 +2,12 @@ package server.rest.response;
 
 
 /**
- * The basic response, containing common factors. To be used for response not returning anything
+ * The basic response, containing common factors. To be used for basic response
  * 
  * @author Sydney
  * 
  */
-public class Response {
+public class DefaultResponse {
     private Integer status;
     private String message;
     private String source;
