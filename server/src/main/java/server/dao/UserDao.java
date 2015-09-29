@@ -18,6 +18,18 @@ public class UserDao extends AbstractDao<User> {
 		super(User.class);
 	}
 	
+	public String findHashByUsername(String username)
+	{
+	    Criteria crit = getCurrentSession().createCriteria(User.class);
+        crit.add(Restrictions.and(Restrictions.eq("username", username),Restrictions.eq("enabled", true)));
+        List<User> users = crit.list();
+        if (users == null || users.size() <= 0) {
+            return null;
+        }
+
+        return users.get(0).getPassword();
+	}
+	
 	public User findByEmailOrUsername(String email, String username)
 	{
 	    Criteria crit = getCurrentSession().createCriteria(User.class);

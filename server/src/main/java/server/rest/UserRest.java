@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import server.entity.User;
+import server.rest.request.AuthenticateRequest;
 import server.rest.response.DefaultResponse;
 import server.service.UserService;
 
@@ -33,6 +34,17 @@ public class UserRest {
 
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+    
+    @POST
+    @Path("/authenticate")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response authenticate(AuthenticateRequest request)
+    {
+        DefaultResponse resp = userService.authenticateUser(request);
+        Response response = Response.status(Status.fromStatusCode(resp.getStatus())).entity(resp).build();
+        return response;
     }
 
     @POST

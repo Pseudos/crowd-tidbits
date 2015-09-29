@@ -10,15 +10,15 @@ import org.slf4j.LoggerFactory;
 
 public class HMAC {
 	
-	protected Logger getLog() {
-		return LoggerFactory.getLogger(getClass());
+	protected static Logger getLog() {
+		return LoggerFactory.getLogger(HMAC.class);
 	}
 	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
-	public String getHmac(String password, String username) 
+	public static String getHmac(String key, String string) 
 		{
-	        byte[] message = username.getBytes();
-	        byte[] sharedKey = password.getBytes();
+	        byte[] message = string.getBytes();
+	        byte[] sharedKey = key.getBytes();
 	    
 			String hmac;
 			try {
