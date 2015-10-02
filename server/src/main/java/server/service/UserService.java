@@ -10,6 +10,12 @@ import server.rest.request.AuthenticateRequest;
 import server.rest.response.DefaultResponse;
 import server.util.HMAC;
 
+/**
+ * 
+ * @author Sydney
+ *
+ */
+
 public class UserService {
     @Autowired
     UserDao userDao;

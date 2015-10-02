@@ -6,6 +6,12 @@ import ru.xpoft.vaadin.SpringUIProvider;
 
 import com.vaadin.server.VaadinRequest;
 
+/**
+ * 
+ * @author Sydney
+ *
+ */
+
 @Component
 public class DifferentFeaturesForDifferentClients extends SpringUIProvider {
     protected String getUIBeanName(VaadinRequest request) {

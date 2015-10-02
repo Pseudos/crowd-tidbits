@@ -26,13 +26,17 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import server.dao.UserDao;
-import server.layouts.HomeLayout;
 import server.layouts.UserAdminLayout;
 import server.pages.DifferentFeaturesForDifferentClients;
 import server.pages.HomePage;
 import server.pages.UsersUI;
-import server.rest.UserRest;
 import server.service.UserService;
+
+/**
+ * 
+ * @author Sydney
+ *
+ */
 
 @Import(RepositoryConfig.class)
 @Configuration

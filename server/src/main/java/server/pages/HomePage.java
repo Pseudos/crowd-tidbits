@@ -9,7 +9,12 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-//Component is to mark the class as a Spring bean
+/**
+ * 
+ * @author Sydney
+ *
+ */
+
 @Component
 public class HomePage extends UI {
   @Autowired

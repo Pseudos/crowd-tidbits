@@ -1,5 +1,11 @@
 package server.rest.request;
 
+/**
+ * 
+ * @author Sydney
+ *
+ */
+
 public class AuthenticateRequest {
     String authHash;
     String username;

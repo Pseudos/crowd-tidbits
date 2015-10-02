@@ -19,6 +19,12 @@ import server.rest.request.AuthenticateRequest;
 import server.rest.response.DefaultResponse;
 import server.service.UserService;
 
+/**
+ * 
+ * @author Sydney
+ *
+ */
+
 @Component
 @Path("/user")
 public class UserRest {
