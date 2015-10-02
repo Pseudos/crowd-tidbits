@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    <ScrollView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        >
+		    <LinearLayout 
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="vertical"
+		        >
+		        
+		       <fragment
+		        android:id="@+id/fragId"
+		        android:name="com.google.android.gms.maps.MapFragment"
+		        android:layout_width="match_parent"
+		        android:layout_height="400dp"
+		        />
+		       <TextView 
+		           android:layout_width="fill_parent"
+		           android:layout_height="wrap_content"
+		           android:text="View crime spots based on priority"
+		           android:gravity="center"
+		           />
+		       
+		       <RadioGroup android:orientation="horizontal"
+		         android:layout_width="fill_parent"
+		         android:layout_height="wrap_content"
+		         android:gravity="center"
+		         android:layout_margin="5dp">
+		         
+		         <RadioButton 
+		             android:id="@+id/rec_low"
+		             android:layout_width="wrap_content"
+		             android:layout_height="wrap_content"
+		             android:text="low"/>
+		         
+		         <RadioButton 
+		             android:id="@+id/rec_medium"
+		             android:layout_width="wrap_content"
+		             android:layout_height="wrap_content"
+		             android:text="medium"/>
+		         
+		         <RadioButton 
+		             android:id="@+id/rec_high"
+		             android:layout_width="wrap_content"
+		             android:layout_height="wrap_content"
+		             android:text="high"/>
+		         
+		         <RadioButton 
+		             android:id="@+id/rec_critical"
+		             android:layout_width="wrap_content"
+		             android:layout_height="wrap_content"
+		             android:text="critical"/>
+		         
+		     </RadioGroup>
+		     
+		     <Button
+		        android:id="@+id/rec_view"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_margin="10dp"
+		        android:paddingLeft="20dp"
+		        android:paddingRight="20dp"
+		        android:text="View on map"
+		      />	       
+		       
+		    </LinearLayout>
+    </ScrollView>
+    
+
+</LinearLayout>
