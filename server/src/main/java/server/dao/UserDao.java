@@ -30,7 +30,7 @@ public class UserDao extends AbstractDao<User> {
         return users.get(0).getPassword();
 	}
 	
-	public User findByEmailOrUsername(String email, String username)
+	public User findByEmailAndUsername(String email, String username)
 	{
 	    Criteria crit = getCurrentSession().createCriteria(User.class);
         crit.add(Restrictions.or(Restrictions.eq("email", email), Restrictions.eq("username", username)));

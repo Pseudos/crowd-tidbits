@@ -27,8 +27,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import server.dao.UserDao;
 import server.layouts.HomeLayout;
+import server.layouts.UserAdminLayout;
 import server.pages.DifferentFeaturesForDifferentClients;
 import server.pages.HomePage;
+import server.pages.UsersUI;
 import server.rest.UserRest;
 import server.service.UserService;
 
@@ -69,11 +71,17 @@ public class SpringConfig implements ApplicationContextAware {
     public HomePage HomePage() {
         return new HomePage();
     }
+    
+    @Bean
+    @Scope("prototype")
+    public UsersUI UsersUI() {
+        return new UsersUI();
+    }
 
     @Bean
     @Scope("request")
-    public HomeLayout homeLayout() {
-        return new HomeLayout();
+    public UserAdminLayout userAdminLayout() {
+        return new UserAdminLayout();
     }
     
     @Bean

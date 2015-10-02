@@ -91,7 +91,7 @@ public class UserService {
             return response;
         }
         
-        User exists = userDao.findByEmailOrUsername(email, username);
+        User exists = userDao.findByEmailAndUsername(email, username);
         if(exists!=null)
         {
             if(username.equalsIgnoreCase(exists.getUsername()))
