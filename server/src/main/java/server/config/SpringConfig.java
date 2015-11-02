@@ -25,11 +25,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import server.dao.PostDao;
 import server.dao.UserDao;
 import server.layouts.UserAdminLayout;
 import server.pages.DifferentFeaturesForDifferentClients;
 import server.pages.HomePage;
 import server.pages.UsersUI;
+import server.service.PostService;
 import server.service.UserService;
 
 /**
@@ -56,11 +58,22 @@ public class SpringConfig implements ApplicationContextAware {
         return new UserService();
     }
     
+    @Bean
+    public PostService postService()
+    {
+        return new PostService();
+    }
+    
     //DAOs
     @Bean
     public UserDao userDao()
     {
         return new UserDao();
+    }
+    
+    @Bean PostDao postDao()
+    {
+        return new PostDao();
     }
     
     // UIs
