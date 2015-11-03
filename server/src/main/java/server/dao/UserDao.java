@@ -41,4 +41,16 @@ public class UserDao extends AbstractDao<User> {
 
         return users.get(0);
 	}
+	
+	public User findByEmail(String email)
+    {
+        Criteria crit = getCurrentSession().createCriteria(User.class);
+        crit.add(Restrictions.eq("email", email));
+        List<User> users = crit.list();
+        if (users == null || users.size() <= 0) {
+            return null;
+        }
+
+        return users.get(0);
+    }
 }

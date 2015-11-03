@@ -27,10 +27,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import server.dao.PostDao;
 import server.dao.UserDao;
+import server.layouts.PostAdminLayout;
 import server.layouts.UserAdminLayout;
 import server.pages.DifferentFeaturesForDifferentClients;
 import server.pages.HomePage;
 import server.pages.UsersUI;
+import server.pages.PostsUI;
 import server.service.PostService;
 import server.service.UserService;
 
@@ -94,11 +96,24 @@ public class SpringConfig implements ApplicationContextAware {
     public UsersUI UsersUI() {
         return new UsersUI();
     }
+    
+    @Bean
+    @Scope("prototype")
+    public PostsUI PostsUI() {
+        return new PostsUI();
+    }
 
+    //Layouts
     @Bean
     @Scope("request")
     public UserAdminLayout userAdminLayout() {
         return new UserAdminLayout();
+    }
+    
+    @Bean
+    @Scope("request")
+    public PostAdminLayout postAdminLayout() {
+        return new PostAdminLayout();
     }
     
     @Bean
