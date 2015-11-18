@@ -23,6 +23,10 @@ public class DifferentFeaturesForDifferentClients extends SpringUIProvider {
         if (request.getPathInfo().contains("users")) {
             return "UsersUI";
         }
+        
+        if (request.getPathInfo().contains("posts")) {
+            return "PostsUI";
+        }
 
         // Again, the returned String must be the same as the UI class name
         // Display the home page is the URL doesn't match anything here

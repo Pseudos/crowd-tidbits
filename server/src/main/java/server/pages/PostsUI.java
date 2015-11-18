@@ -12,9 +12,11 @@ import com.vaadin.ui.VerticalLayout;
 @Component
 public class PostsUI extends UI{
     
+    private static final long serialVersionUID = 2983042721635017712L;
     @Autowired
     PostAdminLayout postAdminLayout;
     
+    @Override
     protected void init(VaadinRequest request) {
         VerticalLayout view = postAdminLayout.createLayout();
         setContent(view);

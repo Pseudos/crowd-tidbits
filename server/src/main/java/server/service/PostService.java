@@ -1,5 +1,6 @@
 package server.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -57,6 +58,7 @@ public class PostService {
         post.setLongitude(request.getLongitude());
         post.setPriority(request.getPriority());
         post.setPoster(poster);
+        post.setPostTime(new Date());
         
         postDao.create(post);
         

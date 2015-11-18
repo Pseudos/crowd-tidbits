@@ -9,6 +9,10 @@ import org.hibernate.criterion.Restrictions;
 import server.entity.Post;
 
 public class PostDao extends AbstractDao<Post>{
+    public PostDao() {
+        super(Post.class);
+    }
+    
     public Post findPostById(Long id)
     {
         Post result = null;

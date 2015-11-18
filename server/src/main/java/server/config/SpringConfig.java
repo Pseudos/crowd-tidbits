@@ -44,7 +44,7 @@ import server.service.UserService;
 
 @Import(RepositoryConfig.class)
 @Configuration
-@ComponentScan({ "server.rest", "server.security" })
+@ComponentScan({ "server.rest", "server.layouts" })
 @EnableTransactionManagement
 public class SpringConfig implements ApplicationContextAware {
 

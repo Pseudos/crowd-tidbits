@@ -1,0 +1,176 @@
+import javax.crypto;
+	public void getHmac(String message, String key)
+	{
+        String hmac = "";
+        
+		try {
+            System.out.println("Generating HMAC over string '{}'", message);
+ 		    SecretKey signingKey = new SecretKeySpec(key, HMAC_SHA1_ALGORITHM);
+
+		    Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
+		    mac.init(signingKey);
+
+			byte[] rawHmac = mac.doFinal(user.getBytes("ASCII"));
+			hmac = new String(Base64.encodeBase64(rawHmac), "UTF-8");
+            hmac = hmac.replaceAll("\\/", "_");
+            hmac = hmac.replaceAll("\\+", "-");
+            hmac = hmac.replaceAll("=", "");
+            System.out.println(hmac);
+		}
+		catch (Exception e) {
+			System.out.println("HMAC error");
+			hmac = "ERROR";
+		}
+		return hmac;
+	}
+		
+	/*
+	/ Registration:
+	/ JSON {"username":"Pseudos","email":"cidwick@gmail.com","password":"KNSktX00n_cYAim0dk6cC6QZXAw"}
+	/ Server http://devnode.dev.afrigis.co.za:8080/crowdbits/user/register
+	/ Accepts application/json
+	/ Content-type application/json
+	/ Method POST
+	*/
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.3.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+	public void register()
+	{
+		//Get these values from the registration form
+		String user = "Sydney";
+		String password = "blabla";
+		String email = "foo@something.bar";
+		
+		//Generate the authcode
+		String hmac = getHmac(user, password);
+		String server = "http://devnode.dev.afrigis.co.za:8080/crowdbits/user/register";
+	
+		//Build parameter json string
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\"username\":\"").append(message).append("\",");
+        sb.append("\"email\":\"").append(email).append("\",");
+        sb.append("\"password\":\"").append(hmac).append("\"}");
+        String jsonString = sb.toString();
+		//And put it in an entity for the request
+		StringEntity input = new StringEntity(jsonString);
+		input.setContentType("application/json");
+		
+		//Create http connection, set headers + entity
+		CloseableHttpClient client = new DefaultHttpClient();
+		HttpPost post = new HttpPost(server);
+		post.addHeader("content-type", "application/json");
+		post.addHeader("accepts","application/json");
+		post.setEntity(input);
+		
+		//Make the call
+        CloseableHttpResponse response;
+		response = httpClient.execute(postRequest);
+		
+		//Check the status of the response
+		//202 is good. 304 - user exists. 400 - parameters missing (Should do validation before sending though) Anything else... 
+		//Throw a hissy fit and let them try again
+		//Should also have something for timeout, for no network. Not sure how that would look but probably 404?
+		if (response.getStatusLine().getStatusCode() == 202) {
+			//Handle the response (i.e register success, log them in)
+		}
+		else if (response.getStatusLine().getStatusCode() == 304) {
+			//Tell them the username/email already exists
+			//Get response message to determine which
+			
+			InputStream body = response.getEntity().getContent();
+			String bodyString = IOUtils.toString(body, "UTF-8"); 
+			IOUtils.closeQuietly(body);
+			
+			JSONObject result = new JSONObject(bodyString);
+			String message = result.getString("message");
+			
+			if(message.equalIgnoreCase("Username exists"))
+			{
+				//Username exists
+				//"Username already in use, please choose a different one"
+			}
+			else
+			{
+				//Email exists
+				//"Email already in use, you might already have an account"
+			}
+		}
+		//Everything else! (400, 404, 500, etc etc)
+		else {
+			//Tell them there was an error, and send them back to registration screen.
+			//"Whoops something went wrong with the registration. Please check your network and try again. Let us know if the problem persists."
+		}
+	}
+	
+	/*
+	/ Authentication:
+	/ JSON {"authHash":"Ff-jCcLzZ9ihpd9-NPX8K9y_QnA","username":"pseudos","timestamp":"100"}
+	/ Server http://devnode.dev.afrigis.co.za:8080/crowdbits/user/authenticate
+	/ Accepts application/json
+	/ Content-type application/json
+	/ Method POST
+	*/
+	public void authenticate()
+	{
+		//Get these values from the registration form
+		String user = "Sydney";
+		String password = "blabla";
+		String timestamp = Calendar.getInstance().getTimeInMillis().toString();
+		
+		//Generate the authcode
+		String storedhmac = getHmac(user, password);
+		String hmac = getHmac(storedhmac, timestamp);
+		String server = "http://devnode.dev.afrigis.co.za:8080/crowdbits/user/authenticate";
+	
+		//Build parameter json string
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\"username\":\"").append(message).append("\",");
+        sb.append("\"timestamp\":\"").append(timestamp).append("\",");
+        sb.append("\"authHash\":\"").append(hmac).append("\"}");
+        String jsonString = sb.toString();
+		//And put it in an entity for the request
+		StringEntity input = new StringEntity(jsonString);
+		input.setContentType("application/json");
+		
+		//Create http connection, set headers + entity
+		CloseableHttpClient client = new DefaultHttpClient();
+		HttpPost post = new HttpPost(server);
+		post.addHeader("content-type", "application/json");
+		post.addHeader("accepts","application/json");
+		post.setEntity(input);
+		
+		//Make the call
+        CloseableHttpResponse response;
+		response = httpClient.execute(postRequest);
+		
+		//Check the status of the response
+		//200 is good. 401 - Unauthorised. Anything else...
+		//Throw a hissy fit and let them try again
+		//Should also have something for timeout, for no network. Not sure how that would look but probably 404?
+		if (response.getStatusLine().getStatusCode() == 200) {
+			//Handle the response (i.e login success, log them in)
+		}
+		else if (response.getStatusLine().getStatusCode() == 401) {
+			//User not authorised! Say so, and let them try again?
+			//"Incorrect username and password combination. Try again."
+		}
+		//Everything else! (400, 404, 500, etc etc)
+		else {
+			//Tell them there was an error, and send them back to registration screen.
+			//"Whoops something went wrong while logging in. Please check your network and try again. Let us know if the problem persists."
+		}
+	}
+}

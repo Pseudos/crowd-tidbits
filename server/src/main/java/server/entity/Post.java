@@ -1,5 +1,7 @@
 package server.entity;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
 
@@ -19,8 +24,26 @@ public class Post {
     double longitude;
     User poster;
     int priority;
-    byte[] image;
+    Date postTime;
     
+    @PrePersist
+    protected void onCreate() {
+      postTime = new Date();
+    }
+    
+    /**
+     * @return the postTime
+     */
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getPostTime() {
+        return postTime;
+    }
+    /**
+     * @param postTime the postTime to set
+     */
+    public void setPostTime(Date postTime) {
+        this.postTime = postTime;
+    }
     /**
      * @return the id
      */
@@ -101,18 +124,5 @@ public class Post {
      */
     public void setPriority(int priority) {
         this.priority = priority;
-    }
-    
-    /**
-     * @return the image
-     */
-    public byte[] getImage() {
-        return image;
-    }
-    /**
-     * @param image the image to set
-     */
-    public void setImage(byte[] image) {
-        this.image = image;
     }
 }
