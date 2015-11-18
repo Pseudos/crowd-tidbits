@@ -118,6 +118,7 @@ import javax.crypto;
 	/*
 	/ Authentication:
 	/ JSON {"authHash":"Ff-jCcLzZ9ihpd9-NPX8K9y_QnA","username":"pseudos","timestamp":"100"}
+	/ Hash of registration hash, timestamp as key
 	/ Server http://devnode.dev.afrigis.co.za:8080/crowdbits/user/authenticate
 	/ Accepts application/json
 	/ Content-type application/json
@@ -171,6 +172,76 @@ import javax.crypto;
 		else {
 			//Tell them there was an error, and send them back to registration screen.
 			//"Whoops something went wrong while logging in. Please check your network and try again. Let us know if the problem persists."
+		}
+	}
+	
+	/*
+	/ Submit post:
+	/ JSON {'description':'post text','latitude':0.0,'longitude':0.0,'poster':'userEmail','priority':0/1/2,'hash':'base64 SHA-1 HMAC'}
+    / Hash of password (hash) generated with key - email
+	/ Server http://devnode.dev.afrigis.co.za:8080/crowdbits/post/submit
+	/ Accepts application/json
+	/ Content-type application/json
+	/ Method POST
+	*/
+	public void authenticate()
+	{
+		//Get these values from the registration form
+		String text = "post text";
+		String latitude = "28.123";
+		String longitude = "-25.126";
+		String author = "cidwick@gmail.com";
+		String priority = "1";
+		
+		//Should be stored on the phone, or in the application
+		String user = "Pseudos";
+		String password = "Blabla";
+		
+		//Generate the authcode
+		String storedhmac = getHmac(user, password);
+		String hmac = getHmac(storedhmac, author);
+		String server = "http://devnode.dev.afrigis.co.za:8080/crowdbits/post/submit";
+	
+		//Build parameter json string
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\"description\":\"").append(text).append("\",");
+        sb.append("\"latitude\":\"").append(latitude).append("\",");
+		sb.append("\"longitude\":\"").append(longitude).append("\",");
+		sb.append("\"poster\":\"").append(author).append("\",");
+		sb.append("\"priority\":\"").append(priority).append("\",");
+        sb.append("\"hash\":\"").append(hmac).append("\"}");
+        String jsonString = sb.toString();
+		//And put it in an entity for the request
+		StringEntity input = new StringEntity(jsonString);
+		input.setContentType("application/json");
+		
+		//Create http connection, set headers + entity
+		CloseableHttpClient client = new DefaultHttpClient();
+		HttpPost post = new HttpPost(server);
+		post.addHeader("content-type", "application/json");
+		post.addHeader("accepts","application/json");
+		post.setEntity(input);
+		
+		//Make the call
+        CloseableHttpResponse response;
+		response = httpClient.execute(postRequest);
+		
+		//Check the status of the response
+		//200 is good. 401 - Unauthorised. Anything else...
+		//Throw a hissy fit and let them try again
+		//Should also have something for timeout, for no network. Not sure how that would look but probably 404?
+		if (response.getStatusLine().getStatusCode() == 200) {
+			//Post was added! Go back to map screen??
+		}
+		else if (response.getStatusLine().getStatusCode() == 401) {
+			//User not authorised! Say so, and let them try again?
+			//This shouldn't be able to happen, since they already logged in
+			//"Incorrect username and password combination. Try again." ???
+		}
+		//Everything else! (400, 404, 500, etc etc)
+		else {
+			//Tell them there was an error, and send them back to registration screen.
+			//"Whoops something went wrong while posting. Please check your network and try again. Let us know if the problem persists."
 		}
 	}
 }
