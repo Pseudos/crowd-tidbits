@@ -42,7 +42,7 @@ public class PostService {
             return response;
         }
         
-        String hash = HMAC.getHmac(poster.getPassword(), request.getPoster());
+        String hash = HMAC.getHmac(request.getPoster(), poster.getPassword());
         getLog().debug("Comparing hashes {} and {}", hash, request.getHash());
         if(!hash.equals(request.getHash()))
         {

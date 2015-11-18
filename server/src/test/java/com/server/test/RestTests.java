@@ -18,28 +18,26 @@ import org.json.JSONObject;
 import org.junit.Test;
 
 public class RestTests {
-    public String getHmac(String messageStr, String keyStr)
+    public static String getHmac(String string, String key) 
     {
-        String hmac = "";
-        byte[] message = messageStr.getBytes();
-        byte[] key = keyStr.getBytes();
-        
+        byte[] message = string.getBytes();
+        byte[] sharedKey = key.getBytes();
+    
+        String hmac;
         try {
-            System.out.println("Generating HMAC over string " + message);
-            SecretKey signingKey = new SecretKeySpec(key, "HmacSHA1");
-
+            SecretKey signingKey = new SecretKeySpec(sharedKey, "HmacSHA1");
+        
             Mac mac = Mac.getInstance("HmacSHA1");
             mac.init(signingKey);
-
+            
             byte[] rawHmac = mac.doFinal(message);
-            hmac = new String(Base64.encodeBase64(rawHmac), "UTF-8");
-            hmac = hmac.replaceAll("\\/", "_");
-            hmac = hmac.replaceAll("\\+", "-");
-            hmac = hmac.replaceAll("=", "");
-            System.out.println(hmac);
+            hmac = Base64.encodeBase64String(rawHmac);
+            
+            hmac = hmac.replace("/", "_");
+            hmac = hmac.replace("+", "-");
+            hmac = hmac.replace("=", "");
         }
         catch (Exception e) {
-            System.out.println("HMAC error");
             hmac = "ERROR";
         }
         return hmac;
@@ -244,7 +242,6 @@ public class RestTests {
         
         //Generate the authcode
         String storedhmac = getHmac(user, password);
-        System.out.println("(Test)Hashing " + storedhmac + " over " + author);
         String hmac = getHmac(storedhmac, author);
         String server = "http://devnode.dev.afrigis.co.za:8080/crowdbits/post/submit";
     
