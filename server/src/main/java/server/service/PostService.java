@@ -52,12 +52,16 @@ public class PostService {
             return response;
         }
         
+        User pstr = new User();
+        pstr.setEmail(poster.getEmail());
+        pstr.setUsername(poster.getEmail());
+        
         Post post = new Post();
         post.setDescription(request.getDescription());
         post.setLatitude(request.getLatitude());
         post.setLongitude(request.getLongitude());
         post.setPriority(request.getPriority());
-        post.setPoster(poster);
+        post.setPoster(pstr);
         post.setPostTime(new Date());
         
         postDao.create(post);
@@ -75,8 +79,9 @@ public class PostService {
         double trLon = request.getTrLon();
         double blLat = request.getBlLat();
         double blLon = request.getBlLon();
+        int priority = request.getPriority();
         
-        List<Post> posts = postDao.getBoundingBox(trLat, trLon, blLat, blLon);
+        List<Post> posts = postDao.getBoundingBox(trLat, trLon, blLat, blLon, priority);
         
         response.setNumPosts(posts.size());
         response.setMessage("");
@@ -93,8 +98,9 @@ public class PostService {
         double lat = request.getLat();
         double lon = request.getLon();
         double distance = request.getDistance(); //km
+        int priority = request.getPriority();
         
-        List<Post> posts = postDao.getInRadius(lat, lon, distance);
+        List<Post> posts = postDao.getInRadius(lat, lon, distance, priority);
         
         response.setNumPosts(posts.size());
         response.setMessage("");

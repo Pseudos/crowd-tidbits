@@ -27,10 +27,17 @@ public class PostDao extends AbstractDao<Post>{
         return null;
     }
     
-    public List<Post> getBoundingBox(double trLat, double trLon, double blLat, double blLon)
+    public List<Post> getBoundingBox(double trLat, double trLon, double blLat, double blLon, int priority)
     {
         Criteria crit = getCurrentSession().createCriteria(Post.class);
-        crit.add(Restrictions.and(Restrictions.between("latitude", trLat, blLat),Restrictions.between("longitude",blLon,trLon)));
+        System.out.println("between " + trLat + " and " + blLat);
+        //crit.add(Restrictions.between("latitude", blLat, trLat));
+        crit.add(Restrictions.and(Restrictions.between("latitude", blLat, trLat),Restrictions.between("longitude",blLon,trLon)));
+        if(priority!=0)
+        {
+            crit.add(Restrictions.eq("priority", priority));
+        }
+        System.out.println(crit.toString());
         List<Post> list = crit.list();
         
         if(list.size()>0)
@@ -40,7 +47,7 @@ public class PostDao extends AbstractDao<Post>{
         return new ArrayList<Post>();
     }
     
-    public List<Post> getInRadius(double lat, double lon, double distance)
+    public List<Post> getInRadius(double lat, double lon, double distance, int priority)
     {
         //Create the bounding box
         double blLat, blLon, trLat, trLon;
@@ -56,6 +63,6 @@ public class PostDao extends AbstractDao<Post>{
         blLon = lon - lonDistance;
         trLon = lon + lonDistance;
         
-        return getBoundingBox(trLat, trLon, blLat, blLon);
+        return getBoundingBox(trLat, trLon, blLat, blLon, priority);
     }
 }
