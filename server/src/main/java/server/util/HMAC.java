@@ -8,6 +8,12 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 
+ * @author Sydney
+ *
+ */
+
 public class HMAC {
 	
 	protected static Logger getLog() {

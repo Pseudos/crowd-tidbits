@@ -6,6 +6,12 @@ import ru.xpoft.vaadin.SpringUIProvider;
 
 import com.vaadin.server.VaadinRequest;
 
+/**
+ * 
+ * @author Sydney
+ *
+ */
+
 @Component
 public class DifferentFeaturesForDifferentClients extends SpringUIProvider {
     protected String getUIBeanName(VaadinRequest request) {
@@ -16,6 +22,10 @@ public class DifferentFeaturesForDifferentClients extends SpringUIProvider {
 
         if (request.getPathInfo().contains("users")) {
             return "UsersUI";
+        }
+        
+        if (request.getPathInfo().contains("posts")) {
+            return "PostsUI";
         }
 
         // Again, the returned String must be the same as the UI class name

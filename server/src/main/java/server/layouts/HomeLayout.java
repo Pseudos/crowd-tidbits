@@ -3,6 +3,12 @@ package server.layouts;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * 
+ * @author Sydney
+ *
+ */
+
 public class HomeLayout {
     public VerticalLayout createLayout() {
         VerticalLayout base = new VerticalLayout();

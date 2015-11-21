@@ -25,18 +25,26 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import server.dao.PostDao;
 import server.dao.UserDao;
-import server.layouts.HomeLayout;
+import server.layouts.PostAdminLayout;
 import server.layouts.UserAdminLayout;
 import server.pages.DifferentFeaturesForDifferentClients;
 import server.pages.HomePage;
 import server.pages.UsersUI;
-import server.rest.UserRest;
+import server.pages.PostsUI;
+import server.service.PostService;
 import server.service.UserService;
+
+/**
+ * 
+ * @author Sydney
+ *
+ */
 
 @Import(RepositoryConfig.class)
 @Configuration
-@ComponentScan({ "server.rest", "server.security" })
+@ComponentScan({ "server.rest", "server.layouts" })
 @EnableTransactionManagement
 public class SpringConfig implements ApplicationContextAware {
 
@@ -52,11 +60,22 @@ public class SpringConfig implements ApplicationContextAware {
         return new UserService();
     }
     
+    @Bean
+    public PostService postService()
+    {
+        return new PostService();
+    }
+    
     //DAOs
     @Bean
     public UserDao userDao()
     {
         return new UserDao();
+    }
+    
+    @Bean PostDao postDao()
+    {
+        return new PostDao();
     }
     
     // UIs
@@ -77,11 +96,24 @@ public class SpringConfig implements ApplicationContextAware {
     public UsersUI UsersUI() {
         return new UsersUI();
     }
+    
+    @Bean
+    @Scope("prototype")
+    public PostsUI PostsUI() {
+        return new PostsUI();
+    }
 
+    //Layouts
     @Bean
     @Scope("request")
     public UserAdminLayout userAdminLayout() {
         return new UserAdminLayout();
+    }
+    
+    @Bean
+    @Scope("request")
+    public PostAdminLayout postAdminLayout() {
+        return new PostAdminLayout();
     }
     
     @Bean

@@ -10,6 +10,12 @@ import server.rest.request.AuthenticateRequest;
 import server.rest.response.DefaultResponse;
 import server.util.HMAC;
 
+/**
+ * 
+ * @author Sydney
+ *
+ */
+
 public class UserService {
     @Autowired
     UserDao userDao;
@@ -97,12 +103,12 @@ public class UserService {
             if(username.equalsIgnoreCase(exists.getUsername()))
             {
                 response.setMessage("Username exists");
-                response.setStatus(304);
+                response.setStatus(200);
             }
             else if(email.equalsIgnoreCase(exists.getEmail()))
             {
                 response.setMessage("Email exists");
-                response.setStatus(304);
+                response.setStatus(200);
             }
             return response;
         }

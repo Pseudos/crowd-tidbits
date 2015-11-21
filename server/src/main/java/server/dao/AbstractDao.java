@@ -4,6 +4,7 @@
  */
 package server.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -72,7 +73,12 @@ public abstract class AbstractDao<T>{
 
     @SuppressWarnings("unchecked")
     public List<T> findAll() {
-        return getCurrentSession().createCriteria(entityClass).list();
+        List<T> stuff = getCurrentSession().createCriteria(entityClass).list();
+        if(stuff==null)
+        {
+            return new ArrayList<T>();
+        }
+        return stuff;
     }
 
     public void deleteAll(List<T> entityList) {

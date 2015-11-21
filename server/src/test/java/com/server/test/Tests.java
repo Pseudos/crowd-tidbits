@@ -66,7 +66,7 @@ public class Tests {
                 conn = dataSource.getConnection();
                 st = conn.createStatement();
 
-                st.execute("insert into user (id,username,email,password,enabled) VALUES (1,'test1','test1@test.com','EAJq1n1RmUc0khsaESJD6ELaKis',1)");
+                //st.execute("insert into user (username,email,password,enabled) VALUES ('test1','test1@test.com','EAJq1n1RmUc0khsaESJD6ELaKis',1)");
 
                 st.close();
                 conn.close();

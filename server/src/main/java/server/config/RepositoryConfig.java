@@ -18,6 +18,12 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 
+/**
+ * 
+ * @author Sydney
+ *
+ */
+
 @Configuration
 public class RepositoryConfig {
 
