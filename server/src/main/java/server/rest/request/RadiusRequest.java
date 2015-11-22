@@ -4,7 +4,20 @@ public class RadiusRequest {
     double distance;
     double lat;
     double lon;
+    int priority;
     
+    /**
+     * @return the priority
+     */
+    public int getPriority() {
+        return priority;
+    }
+    /**
+     * @param priority the priority to set
+     */
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
     /**
      * @return the distance
      */

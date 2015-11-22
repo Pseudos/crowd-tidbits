@@ -5,7 +5,20 @@ public class BoxRequest {
     double trLon;
     double blLat;
     double blLon;
+    int priority;
     
+    /**
+     * @return the priority
+     */
+    public int getPriority() {
+        return priority;
+    }
+    /**
+     * @param priority the priority to set
+     */
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
     /**
      * @return the trLat
      */

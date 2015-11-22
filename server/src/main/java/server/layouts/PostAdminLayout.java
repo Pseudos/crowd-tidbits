@@ -83,9 +83,10 @@ public class PostAdminLayout {
 
         // Add values to the dropdown list
         select.addItem("All");
-        select.addItem("0");
         select.addItem("1");
         select.addItem("2");
+        select.addItem("3");
+        select.addItem("4");
         select.select("All");
 
         // Text change listener for the search bar

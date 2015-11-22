@@ -26,6 +26,7 @@ public class UserService {
     
     public DefaultResponse authenticateUser(AuthenticateRequest request)
     {
+        System.out.println("Authenticating user");
         DefaultResponse response = new DefaultResponse();
         response.setSource("Crowd_tidbits");
         
@@ -39,22 +40,27 @@ public class UserService {
         //CHeck that all parameters are included
         //Could be done in one if statement, but readability is improved
         if (username == null || username.isEmpty()) {
+            System.out.println("Returning: " + response.getStatus());
             return response;
         }
         if (requestHash == null || requestHash.isEmpty()) {
+            System.out.println("Returning: " + response.getStatus());
             return response;
         }
         if (timestamp == null || timestamp.isEmpty()) {
+            System.out.println("Returning: " + response.getStatus());
             return response;
         }
         
         getLog().debug("All parameters present");
         
         //Fetches password. Also checks that user exists
-        String password = userDao.findHashByUsername(username);
+        User user = userDao.findByUsername(username);
+        String password = user.getPassword();
         if(password==null)
         {
             getLog().debug("User doesn't exist");
+            System.out.println("Returning: " + response.getStatus());
             return response;
         }
         
@@ -64,15 +70,18 @@ public class UserService {
         if(!hash.equals(requestHash))
         {
             getLog().debug("Hashes do not match!");
+            System.out.println("Returning: " + response.getStatus());
             return response;
         }
         
         response.setStatus(200);
-        response.setMessage("Authenticated");
+        response.setMessage(user.getEmail());
+        System.out.println("Returning: " + response.getStatus());
         return response;
     }
 
     public DefaultResponse registerUser(User request) {
+        System.out.println("Registering user");
         DefaultResponse response = new DefaultResponse();
         response.setSource("Crowd_tidbits");
         
@@ -84,16 +93,19 @@ public class UserService {
         if (email == null || email.isEmpty()) {
             response.setMessage("The request does not contain all required parameters");
             response.setStatus(400);
+            System.out.println("Returning: " + response.getStatus());
             return response;
         } 
         if (username == null || username.isEmpty()) {
             response.setMessage("The request does not contain all required parameters");
             response.setStatus(400);
+            System.out.println("Returning: " + response.getStatus());
             return response;
         }
         if (request.getPassword() == null || request.getPassword().isEmpty()) {
             response.setMessage("The request does not contain all required parameters");
             response.setStatus(400);
+            System.out.println("Returning: " + response.getStatus());
             return response;
         }
         
@@ -110,6 +122,7 @@ public class UserService {
                 response.setMessage("Email exists");
                 response.setStatus(200);
             }
+            System.out.println("Returning: " + response.getStatus());
             return response;
         }
         
@@ -123,6 +136,7 @@ public class UserService {
         
         response.setMessage("Created");
         response.setStatus(202);
+        System.out.println("Returning: " + response.getStatus());
         return response;
     }
 }

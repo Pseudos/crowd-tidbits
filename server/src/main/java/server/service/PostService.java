@@ -39,6 +39,7 @@ public class PostService {
         {
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             response.setMessage("Request parameters incorrect");
+            System.out.println("Returning: " + response.getStatus());
             return response;
         }
         
@@ -49,21 +50,26 @@ public class PostService {
             getLog().debug("Hashes do not match!");
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setMessage("Not authorized");
+            System.out.println("Returning: " + response.getStatus());
             return response;
         }
+        
+        
+        User pstr = userDao.findByEmail(poster.getEmail());
         
         Post post = new Post();
         post.setDescription(request.getDescription());
         post.setLatitude(request.getLatitude());
         post.setLongitude(request.getLongitude());
         post.setPriority(request.getPriority());
-        post.setPoster(poster);
+        post.setPoster(pstr);
         post.setPostTime(new Date());
         
         postDao.create(post);
         
         response.setStatus(HttpStatus.ACCEPTED.value());
         response.setMessage("Accepted");
+        System.out.println("Returning: " + response.getStatus());
         return response;
     }
 
@@ -75,14 +81,16 @@ public class PostService {
         double trLon = request.getTrLon();
         double blLat = request.getBlLat();
         double blLon = request.getBlLon();
+        int priority = request.getPriority();
         
-        List<Post> posts = postDao.getBoundingBox(trLat, trLon, blLat, blLon);
+        List<Post> posts = postDao.getBoundingBox(trLat, trLon, blLat, blLon, priority);
         
         response.setNumPosts(posts.size());
         response.setMessage("");
         response.setPosts(posts);
         response.setStatus(HttpStatus.OK.value());
         
+        System.out.println("Returning: " + response.getStatus());
         return response;
     }
     
@@ -93,14 +101,16 @@ public class PostService {
         double lat = request.getLat();
         double lon = request.getLon();
         double distance = request.getDistance(); //km
+        int priority = request.getPriority();
         
-        List<Post> posts = postDao.getInRadius(lat, lon, distance);
+        List<Post> posts = postDao.getInRadius(lat, lon, distance, priority);
         
         response.setNumPosts(posts.size());
         response.setMessage("");
         response.setPosts(posts);
         response.setStatus(HttpStatus.OK.value());
         
+        System.out.println("Returning: " + response.getStatus());
         return response;
     }
 }
