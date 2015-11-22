@@ -54,9 +54,8 @@ public class PostService {
             return response;
         }
         
-        User pstr = new User();
-        pstr.setEmail(poster.getEmail());
-        pstr.setUsername(poster.getEmail());
+        
+        User pstr = userDao.findByEmail(poster.getEmail());
         
         Post post = new Post();
         post.setDescription(request.getDescription());

@@ -208,7 +208,14 @@ public class RestTests {
         System.out.println(response.getStatusLine().getStatusCode());
         if (response.getStatusLine().getStatusCode() == 200) {
             //Handle the response (i.e login success, log them in)
-            System.out.println("Authenticated");
+            InputStream body = response.getEntity().getContent();
+            String bodyString = IOUtils.toString(body, "UTF-8"); 
+            IOUtils.closeQuietly(body);
+            
+            JSONObject result = new JSONObject(bodyString);
+            String message = result.getString("message");
+            System.out.println(message);
+            
         }
         else if (response.getStatusLine().getStatusCode() == 401) {
             //User not authorised! Say so, and let them try again?

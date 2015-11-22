@@ -55,7 +55,8 @@ public class UserService {
         getLog().debug("All parameters present");
         
         //Fetches password. Also checks that user exists
-        String password = userDao.findHashByUsername(username);
+        User user = userDao.findByUsername(username);
+        String password = user.getPassword();
         if(password==null)
         {
             getLog().debug("User doesn't exist");
@@ -74,7 +75,7 @@ public class UserService {
         }
         
         response.setStatus(200);
-        response.setMessage("Authenticated");
+        response.setMessage(user.getEmail());
         System.out.println("Returning: " + response.getStatus());
         return response;
     }
