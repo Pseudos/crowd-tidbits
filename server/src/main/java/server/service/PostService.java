@@ -39,6 +39,7 @@ public class PostService {
         {
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             response.setMessage("Request parameters incorrect");
+            System.out.println("Returning: " + response.getStatus());
             return response;
         }
         
@@ -49,6 +50,7 @@ public class PostService {
             getLog().debug("Hashes do not match!");
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setMessage("Not authorized");
+            System.out.println("Returning: " + response.getStatus());
             return response;
         }
         
@@ -68,6 +70,7 @@ public class PostService {
         
         response.setStatus(HttpStatus.ACCEPTED.value());
         response.setMessage("Accepted");
+        System.out.println("Returning: " + response.getStatus());
         return response;
     }
 
@@ -88,6 +91,7 @@ public class PostService {
         response.setPosts(posts);
         response.setStatus(HttpStatus.OK.value());
         
+        System.out.println("Returning: " + response.getStatus());
         return response;
     }
     
@@ -107,6 +111,7 @@ public class PostService {
         response.setPosts(posts);
         response.setStatus(HttpStatus.OK.value());
         
+        System.out.println("Returning: " + response.getStatus());
         return response;
     }
 }

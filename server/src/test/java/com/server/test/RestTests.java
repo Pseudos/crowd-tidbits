@@ -87,6 +87,7 @@ public class RestTests {
         String hmac = getHmac(user, password);
         //String server = "http://devnode.dev.afrigis.co.za:8080/crowdbits/user/register";
         String server = "http://127.0.0.1:8080/crowdbits/user/register";
+        //String server = "http://172.20.10.6:8080/crowdbits/user/register";
     
         //Build parameter json string
         StringBuilder sb = new StringBuilder();
@@ -417,7 +418,7 @@ public class RestTests {
     / Content-type application/json
     / Method POST
     */
-    @Test
+    //@Test
     public void radius() throws Exception
     {
         System.out.println("Radius search Test");
