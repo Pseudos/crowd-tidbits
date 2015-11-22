@@ -1,7 +1,10 @@
 package com.server.test;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
@@ -14,8 +17,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
+
+import server.entity.Post;
+import server.entity.User;
 
 public class RestTests {
     public static String getHmac(String string, String key) 
@@ -78,7 +85,9 @@ public class RestTests {
         
         //Generate the authcode
         String hmac = getHmac(user, password);
-        String server = "http://devnode.dev.afrigis.co.za:8080/crowdbits/user/register";
+        //String server = "http://devnode.dev.afrigis.co.za:8080/crowdbits/user/register";
+        String server = "http://127.0.0.1:8080/crowdbits/user/register";
+        //String server = "http://172.20.10.6:8080/crowdbits/user/register";
     
         //Build parameter json string
         StringBuilder sb = new StringBuilder();
@@ -168,7 +177,8 @@ public class RestTests {
         //Generate the authcode
         String storedhmac = getHmac(user, password);
         String hmac = getHmac(storedhmac, timestamp);
-        String server = "http://devnode.dev.afrigis.co.za:8080/crowdbits/user/authenticate";
+        //String server = "http://devnode.dev.afrigis.co.za:8080/crowdbits/user/authenticate";
+        String server = "http://127.0.0.1:8080/crowdbits/user/authenticate";
     
         //Build parameter json string
         StringBuilder sb = new StringBuilder();
@@ -224,15 +234,15 @@ public class RestTests {
     / Content-type application/json
     / Method POST
     */
-    @Test
+    //@Test
     public void submit() throws Exception
     {
         System.out.println("Post submission");
         System.out.println("===============");
         //Get these values from the registration form
         String text = "post text";
-        String latitude = "28.123";
-        String longitude = "-25.126";
+        String latitude = "-25.126";
+        String longitude = "28.123";
         String author = "foo@something.bar";
         String priority = "1";
         
@@ -243,7 +253,9 @@ public class RestTests {
         //Generate the authcode
         String storedhmac = getHmac(user, password);
         String hmac = getHmac(storedhmac, author);
-        String server = "http://devnode.dev.afrigis.co.za:8080/crowdbits/post/submit";
+        
+        //String server = "http://devnode.dev.afrigis.co.za:8080/crowdbits/post/submit";
+        String server = "http://127.0.0.1:8080/crowdbits/post/submit";
     
         //Build parameter json string
         StringBuilder sb = new StringBuilder();
@@ -274,7 +286,7 @@ public class RestTests {
         //Throw a hissy fit and let them try again
         //Should also have something for timeout, for no network. Not sure how that would look but probably 404?
         System.out.println(response.getStatusLine().getStatusCode());
-        if (response.getStatusLine().getStatusCode() == 200) {
+        if (response.getStatusLine().getStatusCode() == 202) {
             //Post was added! Go back to map screen??
             System.out.println("Posted");
         }
@@ -289,6 +301,212 @@ public class RestTests {
             //Tell them there was an error, and send them back to registration screen.
             //"Whoops something went wrong while posting. Please check your network and try again. Let us know if the problem persists."
             System.out.println("+++Require frog pills+++");
+        }
+        
+        client.getConnectionManager().shutdown();
+    }
+    
+    /*
+    / Bounding box:
+    / JSON {'trLat':0.0,'trLon':0.0,'blLat':0.0,'blLon':0.0,'priority':'1'}
+    / Server http://devnode.dev.afrigis.co.za:8080/crowdbits/post/box
+    / Accepts application/json
+    / Content-type application/json
+    / Method POST
+    */
+    //@Test
+    public void box() throws Exception
+    {
+        System.out.println("Bounding box Test");
+        System.out.println("=================");
+        
+        //Top right and bottom left corners of bounding box
+        //Suuplied from application
+        String trLat = "-25.120";
+        String trLon = "28.780";
+        String blLat = "-25.150";
+        String blLon = "28.100";
+        String priority = "0";
+        
+        //String server = "http://devnode.dev.afrigis.co.za:8080/crowdbits/post/box";
+        String server = "http://127.0.0.1:8080/crowdbits/post/box";
+    
+        //Build parameter json string
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\"trLat\":\"").append(trLat).append("\",");
+        sb.append("\"trLon\":\"").append(trLon).append("\",");
+        sb.append("\"blLat\":\"").append(blLat).append("\",");
+        sb.append("\"blLon\":\"").append(blLon).append("\",");
+        sb.append("\"priority\":\"").append(priority).append("\"}");
+        String jsonString = sb.toString();
+        //And put it in an entity for the request
+        StringEntity input = new StringEntity(jsonString);
+        input.setContentType("application/json");
+        
+        //Create http connection, set headers + entity
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(server);
+        post.addHeader("content-type", "application/json");
+        post.addHeader("accepts","application/json");
+        post.setEntity(input);
+        
+        //Make the call
+        HttpResponse response;
+        response = client.execute(post);
+        
+        //Check the status of the response
+        //200 is good. Anything else... 
+        //Throw a hissy fit and maybe allow page refresh
+        //Should also have something for timeout, for no network. Not sure how that would look but probably 404?
+        System.out.println(response.getStatusLine().getStatusCode());
+        if (response.getStatusLine().getStatusCode() == 200) {
+                        
+            InputStream body = response.getEntity().getContent();
+            String bodyString = IOUtils.toString(body, "UTF-8"); 
+            IOUtils.closeQuietly(body);
+            
+            System.out.println(bodyString);
+            
+            JSONObject result = new JSONObject(bodyString);
+            //TODO from here!
+            
+            List<Post> postsToShow = new ArrayList<Post>();
+            JSONArray posts = result.getJSONArray("posts");
+            
+            for(int i=0; i<posts.length(); i++)
+            {
+                JSONObject postJson = (JSONObject) posts.get(i);
+                JSONObject userJson = postJson.getJSONObject("poster");
+                Post postObj = new Post();
+                User userObj = new User();
+                
+                userObj.setEmail(userJson.getString("email"));
+                userObj.setUsername(userJson.getString("username"));
+                
+                postObj.setDescription(postJson.getString("description"));
+                postObj.setId(postJson.getLong("id"));
+                postObj.setLatitude(postJson.getDouble("latitude"));
+                postObj.setLongitude(postJson.getDouble("longitude"));
+                postObj.setPriority(postJson.getInt("priority"));
+                postObj.setPostTime(new Date(postJson.getLong("postTime")));
+                postObj.setPoster(userObj);
+                
+                postsToShow.add(postObj);
+            }
+            
+            for(Post pst : postsToShow)
+            {
+                System.out.println(pst.getDescription() + " lat: " + pst.getLatitude() + " lon: " + pst.getLongitude());
+                System.out.println("Author: " + pst.getPoster().getEmail() + " priority: " + pst.getPriority() + " time:" + pst.getPostTime().toString());
+            }
+        }
+        //Everything else! (400, 404, 500, etc etc)
+        else {
+            System.out.println("+++Out of cheese error+++");
+            //Tell them there was an error, and send them back to registration screen.
+            //"Whoops something went wrong with the registration. Please check your network and try again. Let us know if the problem persists."
+        }
+        
+        client.getConnectionManager().shutdown();
+    }
+    
+    /*
+    / Radius:
+    / JSON {'lat':0.0,'lon':0.0,'distance':0.0,'priority','1'}
+    / Server http://devnode.dev.afrigis.co.za:8080/crowdbits/post/box
+    / Accepts application/json
+    / Content-type application/json
+    / Method POST
+    */
+    //@Test
+    public void radius() throws Exception
+    {
+        System.out.println("Radius search Test");
+        System.out.println("==================");
+        
+        //Top right and bottom left corners of bounding box
+        //Suuplied from application
+        String userLat = "-25.126";
+        String userLon = "28.123";
+        String priority = "1";
+        String distance = "100";
+        
+        //String server = "http://devnode.dev.afrigis.co.za:8080/crowdbits/post/radius";
+        String server = "http://127.0.0.1:8080/crowdbits/post/radius";
+    
+        //Build parameter json string
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\"lat\":\"").append(userLat).append("\",");
+        sb.append("\"lon\":\"").append(userLon).append("\",");
+        sb.append("\"distance\":\"").append(distance).append("\",");
+        sb.append("\"priority\":\"").append(priority).append("\"}");
+        String jsonString = sb.toString();
+        //And put it in an entity for the request
+        StringEntity input = new StringEntity(jsonString);
+        input.setContentType("application/json");
+        
+        //Create http connection, set headers + entity
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(server);
+        post.addHeader("content-type", "application/json");
+        post.addHeader("accepts","application/json");
+        post.setEntity(input);
+        
+        //Make the call
+        HttpResponse response;
+        response = client.execute(post);
+        
+        //Check the status of the response
+        //200 is good. Anything else... 
+        //Throw a hissy fit and maybe allow page refresh
+        //Should also have something for timeout, for no network. Not sure how that would look but probably 404?
+        System.out.println(response.getStatusLine().getStatusCode());
+        if (response.getStatusLine().getStatusCode() == 200) {
+                        
+            InputStream body = response.getEntity().getContent();
+            String bodyString = IOUtils.toString(body, "UTF-8"); 
+            IOUtils.closeQuietly(body);
+            
+            System.out.println(bodyString);
+            
+            JSONObject result = new JSONObject(bodyString);
+            //TODO from here!
+            
+            List<Post> postsToShow = new ArrayList<Post>();
+            JSONArray posts = result.getJSONArray("posts");
+            
+            for(int i=0; i<posts.length(); i++)
+            {
+                JSONObject postJson = (JSONObject) posts.get(i);
+                JSONObject userJson = postJson.getJSONObject("poster");
+                Post postObj = new Post();
+                User userObj = new User();
+                
+                userObj.setEmail(userJson.getString("email"));
+                userObj.setUsername(userJson.getString("username"));
+                
+                postObj.setDescription(postJson.getString("description"));
+                postObj.setId(postJson.getLong("id"));
+                postObj.setLatitude(postJson.getDouble("latitude"));
+                postObj.setLongitude(postJson.getDouble("longitude"));
+                postObj.setPriority(postJson.getInt("priority"));
+                postObj.setPostTime(new Date(postJson.getLong("postTime")));
+                postObj.setPoster(userObj);
+                
+                postsToShow.add(postObj);
+            }
+            
+            for(Post pst : postsToShow)
+            {
+                System.out.println(pst.getDescription() + " lat: " + pst.getLatitude() + " lon: " + pst.getLongitude());
+                System.out.println("Author: " + pst.getPoster().getEmail() + " priority: " + pst.getPriority() + " time:" + pst.getPostTime().toString());
+            }
+        }
+        //Everything else! (400, 404, 500, etc etc)
+        else {
+            System.out.println("+++Out of cheese error+++");
+            //Tell them there was an error, and send them back to registration screen.
+            //"Whoops something went wrong with the registration. Please check your network and try again. Let us know if the problem persists."
         }
         
         client.getConnectionManager().shutdown();
