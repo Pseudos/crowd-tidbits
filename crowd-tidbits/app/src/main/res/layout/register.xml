@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+    <EditText
+        android:id="@+id/rg_username"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:hint="username"/>
+
+    <EditText
+        android:id="@+id/rg_email"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:hint="email"/>
+
+    <EditText
+        android:id="@+id/rg_pass"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:hint="password"/>
+    <EditText
+        android:id="@+id/rg_cpass"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:hint="confirm password"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/resp"/>
+
+    <Button
+        android:id="@+id/rg_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="register"
+        />
+    <Button
+        android:id="@+id/rg_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="back"
+        />
+</LinearLayout>

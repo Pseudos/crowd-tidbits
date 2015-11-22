@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    >
+    <EditText
+        android:id="@+id/lg_username"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:hint="username"/>
+
+    <EditText
+        android:id="@+id/lg_pass"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:hint="password"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/resp2"/>
+
+    <Button
+        android:id="@+id/login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="login"
+        />
+    <Button
+        android:id="@+id/lg_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="register"
+        />
+
+
+</LinearLayout>
