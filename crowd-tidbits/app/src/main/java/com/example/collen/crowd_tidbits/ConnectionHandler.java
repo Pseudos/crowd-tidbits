@@ -17,12 +17,16 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by COLLEN on 11/21/2015.
@@ -361,6 +365,237 @@ public class ConnectionHandler {
         client.getConnectionManager().shutdown();
 
         return myResponse;
+    }
+
+
+    public List<Post> radius(String lat, String lon, String pri) throws Exception
+    {
+        System.out.println("Radius search Test");
+        System.out.println("==================");
+
+        //Top right and bottom left corners of bounding box
+        //Suuplied from application
+        String userLat = lat;
+        String userLon = lon;
+        String priority = pri;
+        String distance = "1000";
+
+        List<Post> postsToShow = new ArrayList<Post>();
+
+        //String server = "http://devnode.dev.afrigis.co.za:8080/crowdbits/post/radius";
+        String server = "http://172.20.10.8:8080/crowdbits/post/radius";
+
+        //Build parameter json string
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\"lat\":\"").append(userLat).append("\",");
+        sb.append("\"lon\":\"").append(userLon).append("\",");
+        sb.append("\"distance\":\"").append(distance).append("\",");
+        sb.append("\"priority\":\"").append(priority).append("\"}");
+        String jsonString = sb.toString();
+        //And put it in an entity for the request
+        StringEntity input = new StringEntity(jsonString);
+        input.setContentType("application/json");
+
+        //Create http connection, set headers + entity
+        final HttpClient client = new DefaultHttpClient();
+        final HttpPost post = new HttpPost(server);
+        post.addHeader("content-type", "application/json");
+        post.addHeader("accepts", "application/json");
+        post.setEntity(input);
+
+        //Make the call
+
+        final HttpResponse[] responseArr = new HttpResponse[1];
+        //responseArr[0] = client.execute(post);
+
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                System.err.println("Inside the thread");
+                try {
+                    responseArr[0] = client.execute(post);
+                    System.err.println(" part 1 : "+ responseArr[0]);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        thread.start();
+        thread.join();
+
+        final HttpResponse response = responseArr[0];
+
+
+        //Check the status of the response
+        //200 is good. Anything else...
+        //Throw a hissy fit and maybe allow page refresh
+        //Should also have something for timeout, for no network. Not sure how that would look but probably 404?
+        System.out.println(response.getStatusLine().getStatusCode());
+        if (response.getStatusLine().getStatusCode() == 200) {
+
+
+            final String[] bodyString = new String[1];
+
+            Thread thread1 = new Thread() {
+                @Override
+                public void run() {
+                    System.err.println("Inside the thread");
+                    try {
+                        InputStream body = response.getEntity().getContent();
+                         bodyString[0] = IOUtils.toString(body, "UTF-8");
+                        IOUtils.closeQuietly(body);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            };
+
+            thread1.start();
+            thread1.join();
+
+            System.out.println(bodyString[0]);
+
+            JSONObject result = new JSONObject(bodyString[0]);
+            //TODO from here!
+
+
+            JSONArray posts = result.getJSONArray("posts");
+
+            for(int i=0; i<posts.length(); i++)
+            {
+                JSONObject postJson = (JSONObject) posts.get(i);
+                JSONObject userJson = postJson.getJSONObject("poster");
+                Post postObj = new Post();
+                User userObj = new User();
+
+                userObj.setEmail(userJson.getString("email"));
+                userObj.setUsername(userJson.getString("username"));
+
+                postObj.setDescription(postJson.getString("description"));
+                postObj.setId(postJson.getLong("id"));
+                postObj.setLatitude(postJson.getDouble("latitude"));
+                postObj.setLongitude(postJson.getDouble("longitude"));
+                postObj.setPriority(postJson.getInt("priority"));
+                postObj.setPostTime(new Date(postJson.getLong("postTime")));
+                postObj.setPoster(userObj);
+
+                postsToShow.add(postObj);
+            }
+
+            for(Post pst : postsToShow)
+            {
+                System.out.println(pst.getDescription() + " lat: " + pst.getLatitude() + " lon: " + pst.getLongitude());
+                System.out.println("Author: " + pst.getPoster().getEmail() + " priority: " + pst.getPriority() + " time:" + pst.getPostTime().toString());
+            }
+        }
+        //Everything else! (400, 404, 500, etc etc)
+        else {
+            System.out.println("+++Out of cheese error+++");
+            //Tell them there was an error, and send them back to registration screen.
+            //"Whoops something went wrong with the registration. Please check your network and try again. Let us know if the problem persists."
+        }
+
+        client.getConnectionManager().shutdown();
+
+        return postsToShow;
+    }
+
+    public class User{
+        String username,email,password;
+        boolean enabled;
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+
+    }
+    public class Post{
+        Long id;
+        String description;
+        double latitude,longitude;
+        User poster;
+        int priority;
+        Date postTime;
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public double getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(double latitude) {
+            this.latitude = latitude;
+        }
+
+        public double getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(double longitude) {
+            this.longitude = longitude;
+        }
+
+        public User getPoster() {
+            return poster;
+        }
+
+        public void setPoster(User poster) {
+            this.poster = poster;
+        }
+
+        public int getPriority() {
+            return priority;
+        }
+
+        public void setPriority(int priority) {
+            this.priority = priority;
+        }
+
+        public Date getPostTime() {
+            return postTime;
+        }
+
+        public void setPostTime(Date postTime) {
+            this.postTime = postTime;
+        }
     }
 
 
