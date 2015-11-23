@@ -10,18 +10,20 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 /**
+ * The container of the homepage. With all the links.
  * 
  * @author Sydney
- *
+ * 
  */
-
 @Component
 public class HomePage extends UI {
-  @Autowired
-  HomeLayout homeLayout;
+	private static final long serialVersionUID = 2103259014064311993L;
 
-  protected void init(VaadinRequest request) {
-      VerticalLayout view = homeLayout.createLayout();
-      setContent(view);
-  }
+	@Autowired
+	private HomeLayout homeLayout;
+
+	protected void init(VaadinRequest request) {
+		VerticalLayout view = homeLayout.createLayout();
+		setContent(view);
+	}
 }

@@ -19,6 +19,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import server.entity.Post;
@@ -241,7 +242,7 @@ public class RestTests {
     / Content-type application/json
     / Method POST
     */
-    //@Test
+    @Test
     public void submit() throws Exception
     {
         System.out.println("Post submission");
@@ -321,7 +322,7 @@ public class RestTests {
     / Content-type application/json
     / Method POST
     */
-    //@Test
+    @Test
     public void box() throws Exception
     {
         System.out.println("Bounding box Test");
@@ -425,7 +426,7 @@ public class RestTests {
     / Content-type application/json
     / Method POST
     */
-    //@Test
+    @Test
     public void radius() throws Exception
     {
         System.out.println("Radius search Test");
