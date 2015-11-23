@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import server.dao.PostDao;
 import server.dao.UserDao;
+import server.layouts.HomeLayout;
 import server.layouts.PostAdminLayout;
 import server.layouts.UserAdminLayout;
 import server.pages.DifferentFeaturesForDifferentClients;
@@ -44,7 +45,7 @@ import server.service.UserService;
 
 @Import(RepositoryConfig.class)
 @Configuration
-@ComponentScan({ "server.rest", "server.layouts"})
+@ComponentScan({ "server.rest", "server.layouts", "server.security"})
 @EnableTransactionManagement
 public class SpringConfig implements ApplicationContextAware {
 
@@ -114,6 +115,12 @@ public class SpringConfig implements ApplicationContextAware {
     @Scope("request")
     public PostAdminLayout postAdminLayout() {
         return new PostAdminLayout();
+    }
+    
+    @Bean
+    @Scope("request")
+    public HomeLayout homeLayout() {
+        return new HomeLayout();
     }
     
     @Bean

@@ -196,7 +196,7 @@ public class PostAdminLayout {
             private static final long serialVersionUID = -1619007343333477254L;
 
             public void buttonClick(ClickEvent event) {
-                UI.getCurrent().getPage().setLocation("/server/ui/");
+                UI.getCurrent().getPage().setLocation("/crowdbits/ui/");
             }
         });
     }
@@ -212,7 +212,7 @@ public class PostAdminLayout {
                             .closeSession(VaadinSession.getCurrent());
                     UI.getCurrent().close();
                     UI.getCurrent().detach();
-                    UI.getCurrent().getPage().setLocation("/server/logout");
+                    UI.getCurrent().getPage().setLocation("/crowdbits/logout");
                 } catch (Exception e) {
                     logout.setComponentError(new SystemError(
                             "Some error occured on the server side"));
