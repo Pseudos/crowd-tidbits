@@ -14,8 +14,9 @@
      <EditText 
          android:id="@+id/tidbit_msg"
          android:layout_width="fill_parent"
-         android:layout_height="50dp"
-         android:hint="Type your tidbit and select level of importance below."
+         android:layout_height="150dp"
+         android:maxLength="150"
+         android:hint="Type your tidbit and select level of importance below. It must be 150 chars max."
          android:layout_margin="20dp"
          />
   

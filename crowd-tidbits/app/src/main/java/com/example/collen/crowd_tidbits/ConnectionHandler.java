@@ -73,7 +73,7 @@ public class ConnectionHandler {
 
         //Generate the authcode
         String hmac = getHmac(user, password);
-        String server = "http://172.20.10.8:8080/crowdbits/user/register";
+        String server = "http://192.168.43.15:8080/crowdbits/user/register";
 
         //Build parameter json string
         StringBuilder sb = new StringBuilder();
@@ -183,7 +183,7 @@ public class ConnectionHandler {
         //Generate the authcode
         String storedhmac = getHmac(user, password);
         String hmac = getHmac(storedhmac, author);
-        String server = "http://172.20.10.8:8080/crowdbits/post/submit";
+        String server = "http://192.168.43.15:8080/crowdbits/post/submit";
 
         //Build parameter json string
         StringBuilder sb = new StringBuilder();
@@ -271,7 +271,7 @@ public class ConnectionHandler {
         //Generate the authcode
         String storedhmac = getHmac(user, password);
         String hmac = getHmac(storedhmac, timestamp);
-        String server = "http://172.20.10.8:8080/crowdbits/user/authenticate";
+        String server = "http://192.168.43.15:8080/crowdbits/user/authenticate";
 
         //Build parameter json string
         StringBuilder sb = new StringBuilder();
@@ -383,7 +383,7 @@ public class ConnectionHandler {
         List<Post> postsToShow = new ArrayList<Post>();
 
         //String server = "http://devnode.dev.afrigis.co.za:8080/crowdbits/post/radius";
-        String server = "http://172.20.10.8:8080/crowdbits/post/radius";
+        String server = "http://192.168.43.15:8080/crowdbits/post/radius";
 
         //Build parameter json string
         StringBuilder sb = new StringBuilder();

@@ -20,11 +20,13 @@
         android:id="@+id/rg_pass"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:inputType="textPassword"
         android:hint="password"/>
     <EditText
         android:id="@+id/rg_cpass"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:inputType="textPassword"
         android:hint="confirm password"/>
 
     <TextView
@@ -34,13 +36,13 @@
 
     <Button
         android:id="@+id/rg_register"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="register"
         />
     <Button
         android:id="@+id/rg_back"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="back"
         />

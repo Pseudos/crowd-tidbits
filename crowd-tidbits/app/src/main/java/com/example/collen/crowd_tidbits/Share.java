@@ -90,10 +90,11 @@ public class Share extends Activity implements GoogleMap.OnMyLocationChangeListe
            @Override
            public void onClick(View v) {
                if(validate()) {
-                   Toast.makeText(getApplicationContext(), longitude + " ** " + latitude + " message: " + message.getText().toString() + "  priority: " + priority_index, Toast.LENGTH_LONG).show();
+                 //  Toast.makeText(getApplicationContext(), longitude + " ** " + latitude + " message: " + message.getText().toString() + "  priority: " + priority_index, Toast.LENGTH_LONG).show();
                    try {
                        String r = connectionHandler.submit(message.getText().toString(),latitude+"",longitude+"",username,email,password,priority_index+"");
-                       resp.setText(r);
+                       Toast.makeText(getApplicationContext(), r, Toast.LENGTH_LONG).show();
+                       //resp.setText(r);
                    } catch (Exception e) {
                        e.printStackTrace();
                    }

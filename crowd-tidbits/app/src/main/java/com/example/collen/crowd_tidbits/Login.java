@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by COLLEN on 11/4/2015.
@@ -51,11 +52,13 @@ public class Login extends Activity{
                         logger.putExtra("username",username.getText().toString());
                         logger.putExtra("password", password.getText().toString());
                         logger.putExtra("email",str);
+                        Toast.makeText(getApplicationContext(), "login successful", Toast.LENGTH_LONG).show();
                         startActivity(logger);
                         finish();
 
                     }else{
-                        resp.setText(ss);
+                        //resp.setText(ss);
+                        Toast.makeText(getApplicationContext(), ss, Toast.LENGTH_LONG).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

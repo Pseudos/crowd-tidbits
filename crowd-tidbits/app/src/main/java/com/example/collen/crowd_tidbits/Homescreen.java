@@ -24,7 +24,7 @@ public class Homescreen extends Activity {
         username = rec.getStringExtra("username");
         email = rec.getStringExtra("email");
         password = rec.getStringExtra("password");
-        Toast.makeText(getApplication(), username + "---" + email +"---"+password, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplication(), username + "---" + email +"---"+password, Toast.LENGTH_LONG).show();
         initialise();
         onclicks();
     }
